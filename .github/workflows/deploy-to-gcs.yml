@@ -26,11 +26,18 @@ jobs:
         run: |
           npm run build
 
+      - name: Verify Output Directory
+        run: |
+          ls -la ./out # Verify that the ./out directory exists and has content
+
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           service_account_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
           project_id: cloud-agah-agah # Replace with your Google Cloud project ID
+
+      - name: Test Google Cloud Authentication
+        run: gcloud auth list # Ensure authentication is working
 
       - name: Upload Files to GCS
         run: |
