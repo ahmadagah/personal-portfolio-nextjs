@@ -24,7 +24,7 @@ jobs:
 
       - name: Build Next.js Project
         run: |
-          npm run build && npm run export
+          npm run build
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
