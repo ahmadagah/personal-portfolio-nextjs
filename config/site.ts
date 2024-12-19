@@ -39,10 +39,6 @@ export const siteConfig = {
       label: 'Blog',
       href: '/blog',
     },
-    {
-      label: 'Logout',
-      href: '/logout',
-    },
   ],
   links: {
     github: 'https://github.com/ahmadagah',

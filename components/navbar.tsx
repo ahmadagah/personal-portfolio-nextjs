@@ -27,35 +27,12 @@ import {
 } from '@/components/icons';
 
 export const Navbar = () => {
-  const searchInput = (
-    <Input
-      aria-label='Search'
-      classNames={{
-        inputWrapper: 'bg-default-100',
-        input: 'text-sm',
-      }}
-      endContent={
-        <Kbd
-          className='hidden lg:inline-block'
-          keys={['command']}
-        >
-          K
-        </Kbd>
-      }
-      labelPlacement='outside'
-      placeholder='Search...'
-      startContent={
-        <SearchIcon className='text-base text-default-400 pointer-events-none flex-shrink-0' />
-      }
-      type='search'
-    />
-  );
-
   return (
     <NextUINavbar
-      maxWidth='xl'
+      maxWidth='2xl'
       position='sticky'
     >
+      {/* Brand Section */}
       <NavbarContent
         className='basis-1/5 sm:basis-full'
         justify='start'
@@ -78,8 +55,10 @@ export const Navbar = () => {
             </p>
           </NextLink>
         </NavbarBrand>
-        </NavbarContent>
-      <NavbarContent>
+      </NavbarContent>
+
+      {/* Links Section */}
+      <NavbarContent className='basis-3/5 sm:basis-full'>
         <ul className='hidden sm:flex gap-4 justify-start ml-2'>
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
@@ -100,11 +79,12 @@ export const Navbar = () => {
         </ul>
       </NavbarContent>
 
+      {/* Social Links Section */}
       <NavbarContent
         className='hidden sm:flex basis-1/5 sm:basis-full'
         justify='end'
       >
-        <NavbarItem className='hidden sm:flex gap-2'>
+        <NavbarItem className='hidden md:flex gap-2'>
           <Link
             isExternal
             aria-label='Twitter'
@@ -128,42 +108,38 @@ export const Navbar = () => {
           </Link>
           <ThemeSwitch />
         </NavbarItem>
-        {/* <NavbarItem className='hidden lg:flex'> */}
-          {/* {searchInput} */}
-        {/* </NavbarItem> */}
-        <NavbarItem className='hidden md:flex'>
+        {/* <NavbarItem className='hidden sm:flex'>
           <Button
             isExternal
             as={Link}
             className='text-sm font-normal text-default-600 bg-default-100'
             href={siteConfig.links.buyMeACoffee}
-            // startContent={
-            //   <HeartFilledIcon className='text-danger' />
-            // }
+            startContent={
+              <HeartFilledIcon className='text-danger' />
+            }
             variant='flat'
           >
             Hire Me
           </Button>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
 
       <NavbarContent
         className='sm:hidden basis-1 pl-4'
         justify='end'
       >
-        <Link
+        {/* <Link
           isExternal
           aria-label='Github'
           href={siteConfig.links.github}
         >
           <GithubIcon className='text-default-500' />
-        </Link>
+        </Link> */}
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
 
       <NavbarMenu>
-        {searchInput}
         <div className='mx-4 mt-2 flex flex-col gap-2'>
           {siteConfig.navMenuItems.map(
             (item, index) => (
@@ -171,16 +147,7 @@ export const Navbar = () => {
                 key={`${item}-${index}`}
               >
                 <Link
-                  color={
-                    index === 2
-                      ? 'primary'
-                      : index ===
-                          siteConfig.navMenuItems
-                            .length -
-                            1
-                        ? 'danger'
-                        : 'foreground'
-                  }
+                  color='foreground'
                   href='#'
                   size='lg'
                 >
