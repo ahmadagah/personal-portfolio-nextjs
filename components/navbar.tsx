@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -27,10 +30,15 @@ import {
 } from '@/components/icons';
 
 export const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] =
+    React.useState(false);
+
   return (
     <NextUINavbar
       maxWidth='2xl'
-      position='sticky'
+      shouldHideOnScroll
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
     >
       {/* Brand Section */}
       <NavbarContent
@@ -44,6 +52,7 @@ export const Navbar = () => {
           <NextLink
             className='flex justify-start items-center gap-1'
             href='/'
+            onClick={() => setIsMenuOpen(false)}
           >
             <img
               src='/logo.svg'
@@ -58,8 +67,11 @@ export const Navbar = () => {
       </NavbarContent>
 
       {/* Links Section */}
-      <NavbarContent className='basis-3/5 sm:basis-full'>
-        <ul className='hidden sm:flex gap-4 justify-start ml-2'>
+      <NavbarContent
+        className='sm:basis-full'
+        justify='end'
+      >
+        <ul className='hidden sm:flex gap-4  ml-2'>
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
@@ -80,7 +92,7 @@ export const Navbar = () => {
       </NavbarContent>
 
       {/* Social Links Section */}
-      <NavbarContent
+      {/* <NavbarContent
         className='hidden sm:flex basis-1/5 sm:basis-full'
         justify='end'
       >
@@ -108,7 +120,7 @@ export const Navbar = () => {
           </Link>
           <ThemeSwitch />
         </NavbarItem>
-        {/* <NavbarItem className='hidden sm:flex'>
+        <NavbarItem className='hidden sm:flex'>
           <Button
             isExternal
             as={Link}
@@ -121,11 +133,11 @@ export const Navbar = () => {
           >
             Hire Me
           </Button>
-        </NavbarItem> */}
-      </NavbarContent>
+        </NavbarItem>
+      </NavbarContent> */}
 
       <NavbarContent
-        className='sm:hidden basis-1 pl-4'
+        className=' flex items-center gap-4'
         justify='end'
       >
         {/* <Link
@@ -136,7 +148,14 @@ export const Navbar = () => {
           <GithubIcon className='text-default-500' />
         </Link> */}
         <ThemeSwitch />
-        <NavbarMenuToggle />
+        <NavbarMenuToggle
+          className='sm:hidden'
+          aria-label={
+            isMenuOpen
+              ? 'Close menue'
+              : 'Open menu'
+          }
+        />
       </NavbarContent>
 
       <NavbarMenu>
@@ -148,8 +167,11 @@ export const Navbar = () => {
               >
                 <Link
                   color='foreground'
-                  href='#'
+                  href={item.href}
                   size='lg'
+                  onClick={() =>
+                    setIsMenuOpen(false)
+                  }
                 >
                   {item.label}
                 </Link>
