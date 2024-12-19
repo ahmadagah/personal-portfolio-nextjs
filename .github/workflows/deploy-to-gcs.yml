@@ -3,7 +3,7 @@ name: Deploy Next.js to Google Cloud Storage
 on:
   push:
     branches:
-      - main # Replace with the branch you want to trigger the action
+      - main
 
 jobs:
   build-and-deploy:
@@ -26,19 +26,19 @@ jobs:
         run: |
           npm run build
 
-      - name: Verify Output Directory
-        run: |
-          ls -la ./out # Verify that the ./out directory exists and has content
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
-          service_account_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-          project_id: cloud-agah-agah # Replace with your Google Cloud project ID
+          project_id: cloud-agah-agah
 
-      - name: Test Google Cloud Authentication
-        run: gcloud auth list # Ensure authentication is working
+      - name: Debug Authentication
+        run: gcloud auth list
 
       - name: Upload Files to GCS
         run: |
-          gsutil -m rsync -r ./out gs://code98.app # Replace with your bucket name
+          gsutil -m rsync -r ./out gs://code98.app
