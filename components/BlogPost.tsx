@@ -5,6 +5,7 @@ interface BlogPostProps {
   date: string;
   author: string;
   content: string;
+  image?: string;
 }
 
 export const BlogPost: React.FC<BlogPostProps> = ({
