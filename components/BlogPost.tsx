@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface BlogPostProps {
   title: string;
@@ -7,7 +7,12 @@ interface BlogPostProps {
   content: string;
 }
 
-export const BlogPost: React.FC<BlogPostProps> = ({ title, date, author, content }) => {
+export const BlogPost: React.FC<BlogPostProps> = ({
+  title,
+  date,
+  author,
+  content,
+}) => {
   return (
     <article className="max-w-3xl mx-auto px-6 py-12">
       <header className="mb-6">

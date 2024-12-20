@@ -1,7 +1,7 @@
 ---
-title: 'TCP #1: Sockets'
-date: '2024-12-19'
-author: 'Ahmad Agah'
+title: "TCP #1: Sockets"
+date: "2024-12-19"
+author: "Ahmad Agah"
 ---
 
 # TCP #1: Sockets
@@ -24,7 +24,7 @@ Run the command using `sudo` and take a screenshot of the output to include in y
 
 ### Examine the "Local Address" Field
 
-Servers such as `ssh` and `nginx` typically listen on `0.0.0.0` to accept connections from any interface on the machine (`INADDR_ANY` when specifying a socket). Servers intended for local access listen only on the loopback interface `localhost...` or `127.0.0.1` (`INADDR_LOOPBACK`), as described in `man 7 ip`. 
+Servers such as `ssh` and `nginx` typically listen on `0.0.0.0` to accept connections from any interface on the machine (`INADDR_ANY` when specifying a socket). Servers intended for local access listen only on the loopback interface `localhost...` or `127.0.0.1` (`INADDR_LOOPBACK`), as described in `man 7 ip`.
 
 Following the address, the port number that each socket is listening on is specified. The port is given either as a name for well-known services as listed in `/etc/services` (e.g., `http` for port 80) or as a number.
 
