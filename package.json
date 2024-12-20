@@ -23,14 +23,18 @@
 		"@nextui-org/theme": "2.4.1",
 		"@react-aria/ssr": "3.9.7",
 		"@react-aria/visually-hidden": "3.8.18",
+		"@tailwindcss/typography": "^0.5.15",
 		"clsx": "2.1.1",
 		"framer-motion": "11.13.1",
+		"gray-matter": "^4.0.3",
 		"intl-messageformat": "^10.5.0",
 		"lottie-react": "^2.4.0",
 		"next": "15.0.4",
 		"next-themes": "^0.4.4",
 		"react": "18.3.1",
-		"react-dom": "18.3.1"
+		"react-dom": "18.3.1",
+		"remark": "^15.0.1",
+		"remark-html": "^16.0.1"
 	},
 	"devDependencies": {
 		"@next/eslint-plugin-next": "15.0.4",

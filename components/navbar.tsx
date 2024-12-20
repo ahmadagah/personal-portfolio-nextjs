@@ -91,62 +91,10 @@ export const Navbar = () => {
         </ul>
       </NavbarContent>
 
-      {/* Social Links Section */}
-      {/* <NavbarContent
-        className='hidden sm:flex basis-1/5 sm:basis-full'
-        justify='end'
-      >
-        <NavbarItem className='hidden md:flex gap-2'>
-          <Link
-            isExternal
-            aria-label='Twitter'
-            href={siteConfig.links.twitter}
-          >
-            <TwitterIcon className='text-default-500' />
-          </Link>
-          <Link
-            isExternal
-            aria-label='Discord'
-            href={siteConfig.links.discord}
-          >
-            <DiscordIcon className='text-default-500' />
-          </Link>
-          <Link
-            isExternal
-            aria-label='Github'
-            href={siteConfig.links.github}
-          >
-            <GithubIcon className='text-default-500' />
-          </Link>
-          <ThemeSwitch />
-        </NavbarItem>
-        <NavbarItem className='hidden sm:flex'>
-          <Button
-            isExternal
-            as={Link}
-            className='text-sm font-normal text-default-600 bg-default-100'
-            href={siteConfig.links.buyMeACoffee}
-            startContent={
-              <HeartFilledIcon className='text-danger' />
-            }
-            variant='flat'
-          >
-            Hire Me
-          </Button>
-        </NavbarItem>
-      </NavbarContent> */}
-
       <NavbarContent
         className=' flex items-center gap-4'
         justify='end'
       >
-        {/* <Link
-          isExternal
-          aria-label='Github'
-          href={siteConfig.links.github}
-        >
-          <GithubIcon className='text-default-500' />
-        </Link> */}
         <ThemeSwitch />
         <NavbarMenuToggle
           className='sm:hidden'

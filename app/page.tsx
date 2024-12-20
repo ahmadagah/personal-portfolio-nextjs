@@ -10,7 +10,7 @@ import animationData from '@/public/coding-animation.json';
 
 export default function Home() {
   return (
-    <section className='flex flex-col md:flex-row items-center justify-between gap-8 px-8 py-16 md:py-20'>
+    <section className='flex flex-col md:flex-row items-center justify-between gap-8'>
       {/* Left Section */}
       <div className='flex flex-col max-w-lg'>
         <h1 className='text-4xl font-bold text-gray-900 dark:text-white'>

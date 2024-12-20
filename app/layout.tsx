@@ -8,6 +8,7 @@ import { Providers } from './providers';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/config/fonts';
 import { Navbar } from '@/components/navbar';
+import { Footer } from '@/components/Footer';
 
 export const metadata: Metadata = {
   title: {
@@ -57,10 +58,13 @@ export default function RootLayout({
           }}
         >
           <div className='relative flex flex-col h-screen'>
+            {/* Navigation Bar */}
             <Navbar />
             <main className='container mx-auto max-w-7xl pt-16 px-6 flex-grow'>
               {children}
             </main>
+            {/* Footer */}
+            <Footer />
           </div>
         </Providers>
       </body>
