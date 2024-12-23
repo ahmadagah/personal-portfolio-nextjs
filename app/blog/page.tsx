@@ -1,5 +1,8 @@
+// blog/page.tsx
+
 import fs from "fs";
 import path from "path";
+
 import matter from "gray-matter";
 import Link from "next/link";
 
@@ -23,14 +26,17 @@ export default function BlogIndexPage() {
               "utf8",
             );
             const { data } = matter(fileContents);
+
             return {
               slug: file.replace(".md", ""),
               title: data.title,
               date: data.date,
             };
           }
+
           return [];
         });
+
         topics[entry.name] = posts;
       }
     });

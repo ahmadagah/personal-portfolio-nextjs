@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Link } from "@nextui-org/link";
+
 import { siteConfig } from "@/config/site";
 import { TwitterIcon, GithubIcon, DiscordIcon } from "@/components/icons";
 
@@ -19,24 +20,24 @@ export const Footer: React.FC = () => {
           <Link
             isExternal
             aria-label="Twitter"
-            href={siteConfig.links.twitter}
             className="text-gray-400 hover:text-white"
+            href={siteConfig.links.twitter}
           >
             <TwitterIcon className="w-6 h-6" />
           </Link>
           <Link
             isExternal
             aria-label="Discord"
-            href={siteConfig.links.discord}
             className="text-gray-400 hover:text-white"
+            href={siteConfig.links.discord}
           >
             <DiscordIcon className="w-6 h-6" />
           </Link>
           <Link
             isExternal
             aria-label="Github"
-            href={siteConfig.links.github}
             className="text-gray-400 hover:text-white"
+            href={siteConfig.links.github}
           >
             <GithubIcon className="w-6 h-6" />
           </Link>

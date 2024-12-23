@@ -1,44 +1,52 @@
-name: Deploy Next.js to Google Cloud Storage
+name: Build and Deploy to Google Cloud Run
 
 on:
   push:
     branches:
-      - main
+      - main # Trigger this workflow when pushing to the main branch
 
 jobs:
   build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      # Step 1: Checkout the code
+      - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22.12.0
+          node-version: 18
 
-      - name: Install Dependencies
-        run: |
-          npm install
-
-      - name: Build Next.js Project
-        run: |
-          npm run build
-
+      # Step 3: Authenticate with Google Cloud
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: cloud-agah-agah
+      # Step 4: Configure Docker to use Google Artifact Registry
+      - name: Configure Docker
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev
 
-      - name: Debug Authentication
-        run: gcloud auth list
-
-      - name: Upload Files to GCS
+      # Step 5: Build Docker Image
+      - name: Build Docker image
         run: |
-          gsutil -m rsync -r ./out gs://code98.app
+          docker buildx build --platform linux/amd64 -t us-west1-docker.pkg.dev/agah-project-1/code98-app-repo/code98-app .
+
+      # Step 6: Push Docker Image to Google Artifact Registry
+      - name: Push Docker image
+        run: |
+          docker push us-west1-docker.pkg.dev/agah-project-1/code98-app-repo/code98-app:latest
+
+      # Step 7: Deploy to Google Cloud Run
+      - name: Deploy to Google Cloud Run
+        run: |
+          gcloud run deploy code98-app \
+          --image us-west1-docker.pkg.dev/agah-project-1/code98-app-repo/code98-app:latest \
+          --region us-west1 \
+          --platform managed \
+          --allow-unauthenticated \
+          --update-env-vars MONGODB_URI=${{ secrets.MONGODB_URI }}

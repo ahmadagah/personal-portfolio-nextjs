@@ -1,16 +1,15 @@
 import fs from 'fs';
 import path from 'path';
+
 import matter from 'gray-matter';
 import Link from 'next/link';
 
-interface TopicPageProps {
-  params: Promise<{ topic: string }>;
-}
-
 export default async function TopicPage({
   params,
-}: TopicPageProps) {
-  const { topic } = await params; // Await the params if it's a promise
+}: {
+  params: Promise<{ topic: string }>;
+}) {
+  const { topic } = await params;
 
   const blogsDirectory = path.join(
     process.cwd(),
@@ -19,29 +18,24 @@ export default async function TopicPage({
   );
 
   const getPosts = () => {
-    const posts = fs
-      .readdirSync(blogsDirectory)
-      .flatMap((file) => {
-        if (file.endsWith('.md')) {
-          const fileContents = fs.readFileSync(
-            path.join(blogsDirectory, file),
-            'utf8'
-          );
-          const { data } = matter(fileContents);
-          return {
-            slug: file.replace('.md', ''),
-            title: data.title,
-            date: data.date,
-            prefix: parseInt(file.split('-')[0]), // Extract the numeric prefix
-          };
-        }
-        return [];
-      });
+    if (!fs.existsSync(blogsDirectory)) return [];
 
-    // Sort posts by numeric prefix
-    return posts.sort(
-      (a, b) => a.prefix - b.prefix
-    );
+    return fs
+      .readdirSync(blogsDirectory)
+      .filter((file) => file.endsWith('.md'))
+      .map((file) => {
+        const fileContents = fs.readFileSync(
+          path.join(blogsDirectory, file),
+          'utf8'
+        );
+        const { data } = matter(fileContents);
+
+        return {
+          slug: file.replace('.md', ''),
+          title: data.title,
+          date: data.date,
+        };
+      });
   };
 
   const posts = getPosts();
@@ -59,12 +53,13 @@ export default async function TopicPage({
           >
             <Link
               href={`/blog/${topic}/${post.slug}`}
+              className='text-blue-500'
             >
-              <span>{`${post.prefix} - ${post.title}`}</span>{' '}
-              <span className='text-sm text-gray-500'>
-                {post.date}
-              </span>
-            </Link>
+              {post.title}
+            </Link>{' '}
+            <span className='text-sm text-gray-500'>
+              {post.date}
+            </span>
           </li>
         ))}
       </ul>
@@ -72,28 +67,22 @@ export default async function TopicPage({
   );
 }
 
-// Add generateStaticParams to support static generation
+// Generate static params for dynamic topic routes
 export async function generateStaticParams() {
   const blogsDirectory = path.join(
     process.cwd(),
     'content/blogs'
   );
 
-  const getTopics = () => {
-    const topics = fs.readdirSync(
-      blogsDirectory,
-      { withFileTypes: true }
-    );
-    const paths: { topic: string }[] = [];
+  const topics = fs
+    .readdirSync(blogsDirectory, {
+      withFileTypes: true,
+    })
+    .filter((dir) => dir.isDirectory())
+    .map((dir) => ({ topic: dir.name }));
 
-    topics.forEach((topic) => {
-      if (topic.isDirectory()) {
-        paths.push({ topic: topic.name });
-      }
-    });
-
-    return paths;
-  };
-
-  return getTopics();
+  return topics;
 }
+
+// Enable ISR to rebuild static pages periodically
+export const revalidate = 60; // Rebuild every 60 seconds

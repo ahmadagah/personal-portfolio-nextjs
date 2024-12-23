@@ -14,15 +14,24 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".", // Ensure correct base URL
+    "paths": {
+      "@/*": ["./*"], // Alias for root folder
+      "@/lib/*": ["./app/lib/*"], // Alias for lib inside app
+      "@rootlib/*": ["./lib/*"] // Alias for lib at the root level
+    },
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["./*"]
-    }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "testMongoDB.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "testMongoDB.js"
+  ],
   "exclude": ["node_modules"]
 }

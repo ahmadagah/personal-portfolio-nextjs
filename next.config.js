@@ -2,7 +2,7 @@
 const nextConfig = {
   // output: "export",
   reactStrictMode: true,
-  output: 'standalone',
+  output: "standalone",
 };
 
 export default nextConfig;

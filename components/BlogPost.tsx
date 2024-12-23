@@ -23,8 +23,8 @@ export const BlogPost: React.FC<BlogPostProps> = ({
         </p>
       </header>
       <section
-        className="prose prose-lg"
         dangerouslySetInnerHTML={{ __html: content }}
+        className="prose prose-lg"
       />
     </article>
   );
