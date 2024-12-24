@@ -1,70 +1,39 @@
-// blog/page.tsx
-
-import fs from "fs";
-import path from "path";
-
-import matter from "gray-matter";
+import { fetchFromGitHub } from "lib/github";
 import Link from "next/link";
 
-export default function BlogIndexPage() {
-  const blogsDirectory = path.join(process.cwd(), "content/blogs");
+export default async function BlogIndexPage() {
+  try {
+    // Fetch topics from GitHub
+    const response = await fetchFromGitHub("blogs");
+    const topics = JSON.parse(response);
 
-  const getPostsByTopic = () => {
-    const entries = fs.readdirSync(blogsDirectory, { withFileTypes: true });
-    const topics: Record<
-      string,
-      { slug: string; title: string; date: string }[]
-    > = {};
-
-    entries.forEach((entry) => {
-      if (entry.isDirectory()) {
-        const topicPath = path.join(blogsDirectory, entry.name);
-        const posts = fs.readdirSync(topicPath).flatMap((file) => {
-          if (file.endsWith(".md")) {
-            const fileContents = fs.readFileSync(
-              path.join(topicPath, file),
-              "utf8",
-            );
-            const { data } = matter(fileContents);
-
-            return {
-              slug: file.replace(".md", ""),
-              title: data.title,
-              date: data.date,
-            };
-          }
-
-          return [];
-        });
-
-        topics[entry.name] = posts;
-      }
-    });
-
-    return topics;
-  };
-
-  const blogsByTopic = getPostsByTopic();
-
-  return (
-    <section>
-      {Object.entries(blogsByTopic).map(([topic, posts]) => (
-        <div key={topic} className="mb-8">
-          <h2 className="text-2xl font-bold capitalize">
-            {topic.replace("_", " ")}
-          </h2>
-          <ul>
-            {posts.map((post) => (
-              <li key={post.slug}>
-                <Link href={`/blog/${topic}/${post.slug}`}>
-                  {post.title} -{" "}
-                  <span className="text-sm text-gray-500">{post.date}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </section>
-  );
+    return (
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {topics
+          .filter((topic: any) => topic.type === "dir") // Only include directories
+          .map((topic: any) => (
+            <div
+              key={topic.name}
+              className="shadow-md rounded-lg p-6 hover:shadow-xl transition-shadow"
+            >
+              <h2 className="text-xl font-bold capitalize mb-4">
+                {topic.name.replace("_", " ")}
+              </h2>
+              <p className="mb-4">
+                Explore posts under the {topic.name.replace("_", " ")} category.
+              </p>
+              <Link
+                href={`/blog/${topic.name}`}
+                className="text-blue-500 font-medium hover:underline"
+              >
+                View Posts →
+              </Link>
+            </div>
+          ))}
+      </section>
+    );
+  } catch (error) {
+    console.error("Error fetching topics:", error);
+    return <div>Error loading topics</div>;
+  }
 }

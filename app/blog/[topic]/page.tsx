@@ -1,8 +1,13 @@
-import fs from 'fs';
-import path from 'path';
+// blog/[topic]/page.tsx
 
-import matter from 'gray-matter';
-import Link from 'next/link';
+import { fetchFromGitHub } from "lib/github";
+import Link from "next/link";
+import matter from "gray-matter";
+
+type Post = {
+  slug: string;
+  title: string;
+};
 
 export default async function TopicPage({
   params,
@@ -11,78 +16,54 @@ export default async function TopicPage({
 }) {
   const { topic } = await params;
 
-  const blogsDirectory = path.join(
-    process.cwd(),
-    'content/blogs',
-    topic
-  );
+  try {
+    // Fetch posts for the specific topic
+    const filePath = `blogs/${topic}`;
+    const response = await fetchFromGitHub(filePath);
+    const files: { name: string }[] = JSON.parse(response);
 
-  const getPosts = () => {
-    if (!fs.existsSync(blogsDirectory)) return [];
+    // Parse frontmatter to get titles
+    const posts: Post[] = await Promise.all(
+      files
+        .filter((file) => file.name.endsWith(".md")) // Only include Markdown files
+        .map(async (file) => {
+          const slug = file.name.replace(".md", ""); // Remove `.md` extension
+          const fileContent = await fetchFromGitHub(`${filePath}/${file.name}`);
+          const { data } = matter(fileContent);
+          return {
+            slug,
+            title: data.title || slug, // Use title from frontmatter or fallback to slug
+          };
+        }),
+    );
 
-    return fs
-      .readdirSync(blogsDirectory)
-      .filter((file) => file.endsWith('.md'))
-      .map((file) => {
-        const fileContents = fs.readFileSync(
-          path.join(blogsDirectory, file),
-          'utf8'
-        );
-        const { data } = matter(fileContents);
-
-        return {
-          slug: file.replace('.md', ''),
-          title: data.title,
-          date: data.date,
-        };
-      });
-  };
-
-  const posts = getPosts();
-
-  return (
-    <section className='max-w-3xl mx-auto px-6 py-12'>
-      <h1 className='text-4xl font-bold mb-6 capitalize'>
-        {topic.replace('_', ' ')}
-      </h1>
-      <ul>
-        {posts.map((post) => (
-          <li
-            key={post.slug}
-            className='mb-2'
-          >
-            <Link
-              href={`/blog/${topic}/${post.slug}`}
-              className='text-blue-500'
-            >
-              {post.title}
-            </Link>{' '}
-            <span className='text-sm text-gray-500'>
-              {post.date}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
+    return (
+      <section className="max-w-3xl mx-auto px-6 py-12">
+        <h1 className="text-4xl font-bold mb-6 capitalize">
+          {topic.replace("_", " ")}
+        </h1>
+        <ul>
+          {posts.map((post) => (
+            <li key={post.slug} className="mb-2">
+              <Link href={`/blog/${topic}/${post.slug}`} className="">
+                {post.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+    );
+  } catch (error) {
+    console.error("Error fetching topic:", error);
+    return <div>Error loading posts for {topic}</div>;
+  }
 }
 
-// Generate static params for dynamic topic routes
 export async function generateStaticParams() {
-  const blogsDirectory = path.join(
-    process.cwd(),
-    'content/blogs'
-  );
+  const response = await fetchFromGitHub("blogs"); // Adjusted to match GitHub structure
+  const topics = JSON.parse(response);
 
-  const topics = fs
-    .readdirSync(blogsDirectory, {
-      withFileTypes: true,
-    })
-    .filter((dir) => dir.isDirectory())
-    .map((dir) => ({ topic: dir.name }));
-
-  return topics;
+  return topics
+    .filter((item: any) => item.type === "dir") // Ensure it's a directory
+    .map((topic: any) => ({ topic: topic.name }));
 }
-
-// Enable ISR to rebuild static pages periodically
-export const revalidate = 60; // Rebuild every 60 seconds

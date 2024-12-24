@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
     <footer className="py-4">
       <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
         {/* Left Section */}
-        <p className="text-sm text-gray-400">
+        <p className="">
           © {new Date().getFullYear()} AHMAD. All rights reserved.
         </p>
 
