@@ -27,12 +27,13 @@ jobs:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       # Step 4: Configure Docker for Google Artifact Registry
-      - name: Configure Docker
+      - name: Configure Docker for Google Artifact Registry
         run: gcloud auth configure-docker us-west1-docker.pkg.dev
 
       # Step 5: Build Docker Image
       - name: Build Docker image
         run: |
+          docker buildx create --use
           docker buildx build \
             --platform linux/amd64 \
             --build-arg MONGODB_URI=${{ secrets.MONGODB_URI }} \
@@ -40,14 +41,10 @@ jobs:
             --build-arg REPO_NAME=${{ secrets.REPO_NAME }} \
             --build-arg REPO_OWNER=${{ secrets.REPO_OWNER }} \
             -t us-west1-docker.pkg.dev/agah-project-1/code98-app-repo/code98-app:latest \
+            --push \
             .
 
-      # Step 6: Push Docker Image
-      - name: Push Docker image
-        run: |
-          docker push us-west1-docker.pkg.dev/agah-project-1/code98-app-repo/code98-app:latest
-
-      # Step 7: Deploy to Google Cloud Run
+      # Step 6: Deploy to Google Cloud Run
       - name: Deploy to Google Cloud Run
         run: |
           gcloud run deploy code98-app \
