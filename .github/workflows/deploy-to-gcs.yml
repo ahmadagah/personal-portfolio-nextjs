@@ -49,4 +49,7 @@ jobs:
           --region us-west1 \
           --platform managed \
           --allow-unauthenticated \
-          --update-env-vars MONGODB_URI=${{ secrets.MONGODB_URI }}
+          --update-env-vars MONGODB_URI=${{ secrets.MONGODB_URI }} \
+          TOKEN_GITHUB=${{ secrets.TOKEN_GITHUB }}, \
+          REPO_NAME=${{ secrets.REPO_NAME }}, \
+          REPO_OWNER=${{ secrets.REPO_OWNER }}

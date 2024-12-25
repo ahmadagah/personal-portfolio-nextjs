@@ -1,21 +1,23 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: '.env.local' });
 
 /**
  * Utility function to fetch content from GitHub repository.
  * @param path - Path to the file or directory inside the repository.
  * @returns Content of the file or directory.
  */
-export async function fetchFromGitHub(path: string): Promise<string> {
+export async function fetchFromGitHub(
+  path: string
+): Promise<string> {
   const repoOwner = process.env.REPO_OWNER;
   const repoName = process.env.REPO_NAME;
   const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`;
 
   const response = await fetch(apiUrl, {
     headers: {
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`, // Ensure your token is in .env.local
-      Accept: "application/vnd.github.v3.raw", // Fetch raw content
+      Authorization: `Bearer ${process.env.TOKEN_GITHUB}`, // Ensure your token is in .env.local
+      Accept: 'application/vnd.github.v3.raw', // Fetch raw content
     },
   });
 
@@ -23,7 +25,7 @@ export async function fetchFromGitHub(path: string): Promise<string> {
     console.error(
       `Failed to fetch ${path}:`,
       response.status,
-      response.statusText,
+      response.statusText
     );
     throw new Error(`Failed to fetch ${path}`);
   }
