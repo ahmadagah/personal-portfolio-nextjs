@@ -19,7 +19,7 @@ ARG TOKEN_GITHUB
 ARG REPO_NAME
 ARG REPO_OWNER
 
-# Use runtime environment variables
+# Pass secrets to runtime environment
 ENV MONGODB_URI=$MONGODB_URI
 ENV TOKEN_GITHUB=$TOKEN_GITHUB
 ENV REPO_NAME=$REPO_NAME
@@ -28,7 +28,7 @@ ENV REPO_OWNER=$REPO_OWNER
 # Build the application
 RUN npm run build
 
-# Expose the port
+# Expose the application port
 EXPOSE 8080
 
 # Start the application
