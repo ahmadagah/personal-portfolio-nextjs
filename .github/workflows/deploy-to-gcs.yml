@@ -1,17 +1,16 @@
-name: Build and Deploy to Google Cloud Run
+name: Secure Build and Deploy to Google Cloud Run
 
 on:
   push:
     branches:
-      - main # Trigger this workflow when pushing to the main branch
+      - main
 
 jobs:
   build-and-deploy:
-    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -21,22 +20,29 @@ jobs:
         with:
           node-version: 18
 
-      # Step 3: Authenticate with Google Cloud
-      - name: Authenticate to Google Cloud
+      # Step 3: Authenticate to Google Cloud
+      - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      # Step 4: Configure Docker to use Google Artifact Registry
-      - name: Configure Docker
+      # Step 4: Configure Docker
+      - name: Configure Docker for Google Artifact Registry
         run: gcloud auth configure-docker us-west1-docker.pkg.dev
 
-      # Step 5: Build Docker Image
+      # Step 5: Build and Push Docker Image (Without Secrets in Build Context)
       - name: Build Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t us-west1-docker.pkg.dev/agah-project-1/code98-app-repo/code98-app .
+          docker buildx build \
+          --platform linux/amd64 \
+          -t us-west1-docker.pkg.dev/agah-project-1/code98-app-repo/code98-app:latest \
+          --build-arg MONGODB_URI=${{ secrets.MONGODB_URI }} \
+          --build-arg TOKEN_GITHUB=${{ secrets.TOKEN_GITHUB }} \
+          --build-arg REPO_NAME=${{ secrets.REPO_NAME }} \
+          --build-arg REPO_OWNER=${{ secrets.REPO_OWNER }} \
+          .
 
-      # Step 6: Push Docker Image to Google Artifact Registry
+      # Step 6: Push Docker image
       - name: Push Docker image
         run: |
           docker push us-west1-docker.pkg.dev/agah-project-1/code98-app-repo/code98-app:latest
@@ -49,7 +55,7 @@ jobs:
           --region us-west1 \
           --platform managed \
           --allow-unauthenticated \
-          --update-env-vars MONGODB_URI=${{ secrets.MONGODB_URI }} \
+          --update-env-vars MONGODB_URI=${{ secrets.MONGODB_URI }}, \
           TOKEN_GITHUB=${{ secrets.TOKEN_GITHUB }}, \
           REPO_NAME=${{ secrets.REPO_NAME }}, \
           REPO_OWNER=${{ secrets.REPO_OWNER }}

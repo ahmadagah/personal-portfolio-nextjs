@@ -1,25 +1,37 @@
 # Use Node.js base image
 FROM node:18-alpine
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json first
+# Copy package files first
 COPY package*.json ./
 
-# Install all dependencies (including devDependencies)
+# Install dependencies
 RUN npm install
 
-# Copy everything into the container
+# Copy the application code
 COPY . .
 
-# Build the Next.js app (this generates .next folder with CSS and other assets)
+# Accept secrets as build arguments
+ARG MONGODB_URI
+ARG TOKEN_GITHUB
+ARG REPO_NAME
+ARG REPO_OWNER
+
+# Use runtime environment variables
+ENV MONGODB_URI=$MONGODB_URI
+ENV TOKEN_GITHUB=$TOKEN_GITHUB
+ENV REPO_NAME=$REPO_NAME
+ENV REPO_OWNER=$REPO_OWNER
+
+# Build the application
 RUN npm run build
 
-# Expose port 8080 (required for Cloud Run)
+# Expose the port
 EXPOSE 8080
 
-# Start the Next.js application
+# Start the application
 CMD ["npm", "start"]
 
 

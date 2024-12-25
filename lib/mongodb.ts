@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 import dotenv from "dotenv";
 
-dotenv.config({ path: "./.env.local" });
+dotenv.config();
 
 // Extend the NodeJS.Global interface
 declare global {
@@ -13,7 +13,7 @@ const uri = process.env.MONGODB_URI;
 
 if (!uri) {
   throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local",
+    "Please define the MONGODB_URI environment variable inside .env.local"
   );
 }
 

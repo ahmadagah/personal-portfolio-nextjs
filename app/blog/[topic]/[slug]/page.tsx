@@ -8,7 +8,7 @@ import { BlogPost } from "@/components/BlogPost";
 
 import dotenv from "dotenv";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const REPO_OWNER = process.env.REPO_OWNER;
 const REPO_NAME = process.env.REPO_NAME;

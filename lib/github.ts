@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 
-dotenv.config({ path: '.env.local' });
+dotenv.config();
 
 /**
  * Utility function to fetch content from GitHub repository.
@@ -16,7 +16,7 @@ export async function fetchFromGitHub(
 
   const response = await fetch(apiUrl, {
     headers: {
-      Authorization: `Bearer ${process.env.TOKEN_GITHUB}`, // Ensure your token is in .env.local
+      Authorization: `Bearer ${process.env.TOKEN_GITHUB}`, // Ensure your token is in the .env file
       Accept: 'application/vnd.github.v3.raw', // Fetch raw content
     },
   });
