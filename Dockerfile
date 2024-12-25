@@ -13,18 +13,6 @@ RUN npm install
 # Copy the application code
 COPY . .
 
-# Accept secrets as build arguments
-ARG MONGODB_URI
-ARG TOKEN_GITHUB
-ARG REPO_NAME
-ARG REPO_OWNER
-
-# Pass secrets to runtime environment
-ENV MONGODB_URI=$MONGODB_URI
-ENV TOKEN_GITHUB=$TOKEN_GITHUB
-ENV REPO_NAME=$REPO_NAME
-ENV REPO_OWNER=$REPO_OWNER
-
 # Build the application
 RUN npm run build
 
@@ -33,6 +21,7 @@ EXPOSE 8080
 
 # Start the application
 CMD ["npm", "start"]
+
 
 
 # # Use the official Node.js image as the base image
