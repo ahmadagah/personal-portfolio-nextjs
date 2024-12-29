@@ -41,7 +41,7 @@ export const BlogPost: React.FC<
         <h1 className='text-4xl font-bold mb-4'>
           {title}
         </h1>
-        <p className='text-sm text-gray-500'>
+        <p className='text-sm'>
           {date} | By{' '}
           <span className='font-medium'>
             {author}
@@ -62,30 +62,7 @@ export const BlogPost: React.FC<
         <h3 className='text-lg font-medium mb-4'>
           Share this post:
         </h3>
-        <div className='flex gap-4'>
-          {/* <a
-            href={``}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-          >
-            Twitter
-          </a>
-          <a
-            href={``}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800"
-          >
-            LinkedIn
-          </a>
-          <a
-            href={``}
-            className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
-          >
-            Email
-          </a> */}
-        </div>
+        <div className='flex gap-4'></div>
       </footer>
     </article>
   );
